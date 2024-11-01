@@ -37,3 +37,14 @@ def get_student(student_name: str):
         if student.name == student_name:
             return student
     raise HTTPException(status_code=404, detail="Student not found")
+
+
+@app.delete("/students/{student_id}", response_model=Student)
+
+def delete_student(student_id: int):
+    for index, student in enumerate(students_db):
+        if student.id == student_id:
+            delete_student = students_db.pop(index)
+            return delete_student
+    raise HTTPException(status_code=404, detail="Student not found")
+        
