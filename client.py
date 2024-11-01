@@ -88,10 +88,18 @@ def update_student():
                 height_change = pyip.inputInt("Enter New Height: ")
                 student["height"] = height_change
                 return student["height"]
+            case _:
+                print("Invalid option")
+                update_student()
+                
+        update_response = requests.put(f"{BASE_URL}{student['id']}/", json=student)
+        if update_response.status_code == 200:
+            print("Student updated successfully.")
+        else:
+            print("Error updating student:", update_response.json().get("detail", "Unknown error"))
     else:
         print("Student id is not in the system!")
         main()
-
 
 
 
