@@ -37,3 +37,13 @@ def get_student(student_name: str):
         if student.name == student_name:
             return student
     raise HTTPException(status_code=404, detail="Student not found")
+
+#gör en update post
+@app.put("/students/{student_id}", response_model=Student)
+def update_student(student_id: int, student: Student):
+    if student_id not in students_db:
+        raise HTTPException(status_code=404, detail="Student not found")
+    students_db[student_id] = student
+        
+    return student
+
