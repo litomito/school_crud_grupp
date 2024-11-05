@@ -15,8 +15,8 @@ class StudentCreate(BaseModel):
     height: int
     grade: str
 
-class StudentUpdate(BaseModel):
-    name: Optional[str] = None
+class StudentUpdate(BaseModel): # template for all of the new student information
+    name: Optional[str] = None 
     age: Optional[int] = None
     gender: Optional[str] = None
     height: Optional[int] = None
@@ -28,7 +28,7 @@ class Student(StudentCreate):
 
 # Create an in-memory database to store the students
 students_db: List[Student] = []
-
+#Returns a list of students.
 @app.get("/students/", response_model = List[Student])
 def get_students():
     return students_db
@@ -43,7 +43,7 @@ def create_student(student: StudentCreate):
     students_db.append(student_with_id)
     return student_with_id
 
-
+#Returns the list. Looks after student name.
 @app.get("/students/{student_name}", response_model = Student)
 def get_student(student_name: str):
     for student in students_db:
