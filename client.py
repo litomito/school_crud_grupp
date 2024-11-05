@@ -80,31 +80,31 @@ def get_student_by_name():
 
 def update_student(student_id: int):
     # Prompt the user to select the field they want to update
-    change = pyip.inputChoice(["name", "age", "grade", "gender", "height"])
-    update_data = {}
+    change = pyip.inputChoice(["name", "age", "grade", "gender", "height"]) # asks the client what they want to change regarding the student information
+    update_data = {} # tuple where the new information goes into
 
     # Collect the updated data based on the user's choice
-    match change:
+    match change: 
         case "name":
-            update_data["name"] = pyip.inputRegex(r"^[A-Za-z\s]+$", prompt = "Enter new name: ")
+            update_data["name"] = pyip.inputRegex(r"^[A-Za-z\s]+$", prompt = "Enter new name: ") # name changer
         case "age":
-            update_data["age"] = pyip.inputInt("Enter new age: ")
+            update_data["age"] = pyip.inputInt("Enter new age: ") # age changer
         case "grade":
-            update_data["grade"] = pyip.inputRegex(r'^[1-9][A-Ea-e]$', prompt = "Enter new grade (1-9, A-E): ").upper()
+            update_data["grade"] = pyip.inputRegex(r'^[1-9][A-Ea-e]$', prompt = "Enter new grade (1-9, A-E): ").upper() # grade changer
         case "gender":
-            update_data["gender"] = pyip.inputChoice(["Male", "Female"])
+            update_data["gender"] = pyip.inputChoice(["Male", "Female"]) # gender changer
         case "height":
-            update_data["height"] = pyip.inputInt("Enter new height: ")
+            update_data["height"] = pyip.inputInt("Enter new height: ") # height changer
 
     # Send the PUT request to update the student
     response = requests.put(f"{BASE_URL}{student_id}", json = update_data)
 
-    if response.status_code == 200:
+    if response.status_code == 200: # if the status-code is 200 the change has been successful
         print("Student record updated successfully.")
         return response.json()
-    elif response.status_code == 404:
+    elif response.status_code == 404: # if the status-code is 404 the change has not worked due to the student not being found
         print("Student not found.")
-    else:
+    else: # shows any others errors that might have occurred
         print(f"Failed to update student record: {response.status_code}, {response.json()}")
 
 
