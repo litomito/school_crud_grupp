@@ -3,7 +3,7 @@
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 app = FastAPI()
 
@@ -14,16 +14,23 @@ class StudentCreate(BaseModel):
     height: int
     grade: str
 
+class StudentUpdate(BaseModel):
+    name: Optional[str] = None
+    age: Optional[int] = None
+    gender: Optional[str] = None
+    height: Optional[int] = None
+    grade: Optional[str] = None
+
 class Student(StudentCreate):
     id: int
 
 students_db: List[Student] = []
 
-@app.get("/students/", response_model=List[Student])
+@app.get("/students/", response_model = List[Student])
 def get_students():
     return students_db
 
-@app.post("/students/", response_model=Student)
+@app.post("/students/", response_model = Student)
 def create_student(student: StudentCreate):
     auto_id = max((s.id for s in students_db), default = 0) + 1
     student_with_id = Student(id = auto_id, **student.model_dump())
@@ -31,20 +38,31 @@ def create_student(student: StudentCreate):
     return student_with_id
 
 
-@app.get("/students/{student_name}", response_model=Student)
+@app.get("/students/{student_name}", response_model = Student)
 def get_student(student_name: str):
     for student in students_db:
         if student.name == student_name:
             return student
-    raise HTTPException(status_code=404, detail="Student not found")
+    raise HTTPException(status_code = 404, detail = "Student not found")
 
 
-@app.delete("/students/{student_id}", response_model=Student)
+@app.put("/students/{student_id}", response_model = Student)
+def update_student(student_id: int, student_update: StudentUpdate):
+    for student in students_db:
+        if student.id == student_id:
+            # Update only fields that are provided in the request
+            update_data = student_update.model_dump(exclude_unset = True)
+            for key, value in update_data.items():
+                setattr(student, key, value)
+            return student
+    raise HTTPException(status_code = 404, detail = "Student not found")
 
+
+@app.delete("/students/{student_id}", response_model = Student)
 def delete_student(student_id: int):
     for index, student in enumerate(students_db):
         if student.id == student_id:
             delete_student = students_db.pop(index)
             return delete_student
-    raise HTTPException(status_code=404, detail="Student not found")
+    raise HTTPException(status_code=404, detail = "Student not found")
         
