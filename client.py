@@ -130,7 +130,7 @@ def delete_student():
     else: # handle other general errors and status codes.
         print("Error", response.status_code,response.json())
 
-
+# Main function to display the menu and handle user input
 def main():
     while True:
         print("1. Create Student\n2. Show All Students\n3. Get Student by Name\n4. Update Student\n5. Delete Student\n6. Exit")
