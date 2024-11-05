@@ -103,7 +103,7 @@ def update_student(student_id: int):
         return response.json()
     elif response.status_code == 404: # if the status-code is 404 the change has not worked due to the student not being found
         print("Student not found.")
-    else:
+    else: # shows any others errors that might have occurred
         print(f"Failed to update student record: {response.status_code}, {response.json()}")
 
 
