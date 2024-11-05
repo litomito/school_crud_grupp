@@ -14,8 +14,8 @@ class StudentCreate(BaseModel):
     height: int
     grade: str
 
-class StudentUpdate(BaseModel):
-    name: Optional[str] = None
+class StudentUpdate(BaseModel): # template for all of the new student information
+    name: Optional[str] = None 
     age: Optional[int] = None
     gender: Optional[str] = None
     height: Optional[int] = None
