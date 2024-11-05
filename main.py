@@ -25,7 +25,7 @@ class Student(StudentCreate):
     id: int
 
 students_db: List[Student] = []
-
+#Returns a list of students.
 @app.get("/students/", response_model = List[Student])
 def get_students():
     return students_db
@@ -37,7 +37,7 @@ def create_student(student: StudentCreate):
     students_db.append(student_with_id)
     return student_with_id
 
-
+#Returns the list. Looks after student name.
 @app.get("/students/{student_name}", response_model = Student)
 def get_student(student_name: str):
     for student in students_db:

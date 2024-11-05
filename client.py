@@ -37,7 +37,7 @@ def create_student():
         print("Student created successfully.")
     else:
         print("Error creating student:", response.json().get("detail", "Unknown error"))
-
+#Function that shows all students in a card like-template. If unsuccessful, prints error.
 def show_all_students():
     response = requests.get(BASE_URL)
     
@@ -58,6 +58,7 @@ def show_all_students():
     else:
         print("Error fetching students:", response.status_code, response.json())
 
+#Search a student by name and returns only that student information.
 def get_student_by_name():
     name = pyip.inputRegex(r"^[A-Za-z\s]+$", prompt="Enter Name: ")
     response = requests.get(BASE_URL + name)
