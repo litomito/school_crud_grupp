@@ -107,8 +107,6 @@ def update_student(student_id: int):
         print(f"Failed to update student record: {response.status_code}, {response.json()}")
 
 
-
-
 def delete_student(student_id: int):
     response = requests.delete(f"{BASE_URL}{student_id}")
     
