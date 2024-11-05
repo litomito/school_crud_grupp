@@ -44,7 +44,8 @@ def create_student():
         print("Student created successfully.")
     else:
         print("Error creating student:", response.json().get("detail", "Unknown error"))
-#Function that shows all students in a card like-template. If unsuccessful, prints error.
+
+# Function that shows all students in a card like-template. If unsuccessful, prints error.
 def show_all_students():
     response = requests.get(BASE_URL)
     
@@ -65,7 +66,7 @@ def show_all_students():
     else:
         print("Error fetching students:", response.status_code, response.json())
 
-#Search a student by name and returns only that student information.
+# Search a student by name and returns only that student information.
 def get_student_by_name():
     name = pyip.inputRegex(r"^[A-Za-z\s]+$", prompt="Enter Name: ")
     response = requests.get(BASE_URL + name)
@@ -115,16 +116,19 @@ def update_student(student_id: int):
         print(f"Failed to update student record: {response.status_code}, {response.json()}")
 
 
-def delete_student(student_id: int):
-    response = requests.delete(f"{BASE_URL}{student_id}")
-    
-    if response.status_code == 200:
-        print("Student record deleted successfully.")
-        return response.json() 
-    elif response.status_code == 404:
-        print("Student not found.")
-    else:
-        print("Failed to delete student record.")
+def delete_student():
+    student_id = pyip.inputInt("Enter ID to delete: ") # Prompt the user to enter the student ID to delete, and validate the input as an integer
+    url = f"{BASE_URL}{student_id}/" 
+    response = requests.delete(url)
+
+    if response.status_code == 200:  # Check if the server response status code is 200(successful)
+        print("student deleted")
+
+    elif response.status_code == 404:# Check if the server response status code is 404 (not found)
+        print("student not fount")
+
+    else: # handle other general errors and status codes.
+        print("Error", response.status_code,response.json())
 
 
 def main():
@@ -142,8 +146,7 @@ def main():
                 student_id = pyip.inputInt("Enter Student ID: ")
                 update_student(student_id)
             case 5:
-                student_id = pyip.inputInt("Enter Student ID: ")
-                delete_student(student_id)
+                delete_student()
             case 6:
                 break
 

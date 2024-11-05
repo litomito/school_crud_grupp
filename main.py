@@ -15,8 +15,8 @@ class StudentCreate(BaseModel):
     height: int
     grade: str
 
-class StudentUpdate(BaseModel): # template for all of the new student information
-    name: Optional[str] = None 
+class StudentUpdate(BaseModel):
+    name: Optional[str] = None
     age: Optional[int] = None
     gender: Optional[str] = None
     height: Optional[int] = None
@@ -28,7 +28,7 @@ class Student(StudentCreate):
 
 # Create an in-memory database to store the students
 students_db: List[Student] = []
-#Returns a list of students.
+
 @app.get("/students/", response_model = List[Student])
 def get_students():
     return students_db
@@ -43,7 +43,7 @@ def create_student(student: StudentCreate):
     students_db.append(student_with_id)
     return student_with_id
 
-#Returns the list. Looks after student name.
+
 @app.get("/students/{student_name}", response_model = Student)
 def get_student(student_name: str):
     for student in students_db:
@@ -64,11 +64,12 @@ def update_student(student_id: int, student_update: StudentUpdate):
     raise HTTPException(status_code = 404, detail = "Student not found")
 
 
-@app.delete("/students/{student_id}", response_model = Student)
-def delete_student(student_id: int):
-    for index, student in enumerate(students_db):
+@app.delete("/students/{student_id}", response_model = Student) # approute to delete a student id and returns the student model as resoonse 
+def delete_student(student_id: int): 
+    for index, student in enumerate(students_db): # loops trough all the students to find the matching student id
         if student.id == student_id:
-            delete_student = students_db.pop(index)
-            return delete_student
-    raise HTTPException(status_code=404, detail = "Student not found")
+            delete_student = students_db.pop(index) # if we find the matched id remove the id from the database.
+            return delete_student # return the deleted student as a resoponse 
+    # if the student with the the right id is not found rasie a http error that the student is not found
+    raise HTTPException(status_code = 404, detail = "Student not found")  
         
