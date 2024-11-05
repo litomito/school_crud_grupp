@@ -4,8 +4,10 @@
 import requests
 import pyinputplus as pyip
 
+# URL of the FastAPI server, where you can see the API
 BASE_URL = "http://127.0.0.1:8000/students/"
 
+# Card template to display student information
 card_template = (
             "+---------------------------+\n"
             "| Name: {name:<20}|\n"
@@ -17,6 +19,7 @@ card_template = (
             "+---------------------------+"
         )
 
+# Function to create a student
 def create_student():
     name = pyip.inputRegex(r"^[A-Za-z\s]+$", prompt="Enter Name: ")
     age = pyip.inputInt("Enter Age: ")
@@ -24,6 +27,7 @@ def create_student():
     height = pyip.inputInt("Enter Height: ")
     grade = pyip.inputRegex(r'^[1-9][A-Ea-e]$', prompt="Enter a grade (1-9, A-E): ").upper()
 
+    # Create a dictionary with the student data
     student = {
         "name": name,
         "age": age,
@@ -31,8 +35,11 @@ def create_student():
         "height": height,
         "grade": grade
     }
+    
+    # Send a POST request to create the student
     response = requests.post(BASE_URL, json = student)
 
+    # Check the response status code and print the appropriate message
     if response.status_code == 200:
         print("Student created successfully.")
     else:

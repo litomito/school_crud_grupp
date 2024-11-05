@@ -7,6 +7,7 @@ from typing import List, Optional
 
 app = FastAPI()
 
+# Define the data models for the API
 class StudentCreate(BaseModel):
     name: str
     age: int
@@ -21,18 +22,23 @@ class StudentUpdate(BaseModel):
     height: Optional[int] = None
     grade: Optional[str] = None
 
+# Define the data model for the response
 class Student(StudentCreate):
     id: int
 
+# Create an in-memory database to store the students
 students_db: List[Student] = []
 
 @app.get("/students/", response_model = List[Student])
 def get_students():
     return students_db
 
+# Create a new student
 @app.post("/students/", response_model = Student)
 def create_student(student: StudentCreate):
+    # Generate a new ID for the student by adding 1 to the maximum ID in the database
     auto_id = max((s.id for s in students_db), default = 0) + 1
+    # Create a new student with the generated ID and the data from the request
     student_with_id = Student(id = auto_id, **student.model_dump())
     students_db.append(student_with_id)
     return student_with_id
