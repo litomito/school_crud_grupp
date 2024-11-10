@@ -29,6 +29,7 @@ class Student(StudentCreate):
 # Create an in-memory database to store the students
 students_db: List[Student] = []
 
+# Returns a list of students.
 @app.get("/students/", response_model = List[Student])
 def get_students():
     return students_db
@@ -43,10 +44,10 @@ def create_student(student: StudentCreate):
     students_db.append(student_with_id)
     return student_with_id
 
-
+# Returns the list. Looks after the student name.
 @app.get("/students/{student_name}", response_model = Student)
 def get_student(student_name: str):
-    for student in students_db:
+    for student in students_db: # Loops through students_db for matching name.
         if student.name == student_name:
             return student
     raise HTTPException(status_code = 404, detail = "Student not found")
